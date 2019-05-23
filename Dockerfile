@@ -10,18 +10,36 @@ RUN tlmgr install minted
 
 RUN apt update -q
 RUN apt install -qy \
-	pandoc pandoc-citeproc \
 	make build-essential libssl-dev zlib1g-dev libbz2-dev \
 	libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
 	xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
 
+ENV PANDOC_VERSION=2.7.2
+RUN wget https://github.com/jgm/pandoc/releases/download/$PANDOC_VERSION/pandoc-$PANDOC_VERSION-linux.tar.gz -qO /tmp/pandoc.tar.gz
+RUN wget https://github.com/jgm/pandoc/archive/$PANDOC_VERSION.tar.gz -qO /tmp/pandoc-archive.tar.gz
+RUN tar -C /tmp/ -xf /tmp/pandoc.tar.gz
+RUN tar -C /tmp/ -xf /tmp/pandoc-archive.tar.gz
+
+RUN mkdir -p /usr/share/pandoc
+WORKDIR /tmp/pandoc-$PANDOC_VERSION
+RUN cp -R bin share /usr/
+RUN cp -R data COPYRIGHT MANUAL.txt /usr/share/pandoc/
+
+RUN wget https://github.com/lierdakil/pandoc-crossref/releases/download/v0.3.4.1/linux-pandoc_2_7_2.tar.gz -qO /tmp/pandoc-crossref.tar.gz
+RUN tar -C /usr/bin -xf /tmp/pandoc-crossref.tar.gz
+
+# Cleanup
 RUN rm -rf /var/lib/apt/lists/*
+RUN rm -rf /tmp/*
+
 RUN useradd -m appuser
-RUN WORKDIR /home/appuser
-RUN USER appuser
-RUN ENV HOME /home/appuser
-RUN ENV PYENV_ROOT /home/appuser/.pyenv
-RUN ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+WORKDIR /home/appuser
+USER appuser
+
+ENV HOME /home/appuser
+ENV PYENV_ROOT /home/appuser/.pyenv
+ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+
 RUN git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
 RUN pyenv install 3.6.8
 RUN pyenv global 3.6.8
