@@ -32,12 +32,18 @@ RUN tar -C /usr/bin -xf /tmp/pandoc-crossref.tar.gz
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /tmp/*
 
-RUN useradd -m appuser
-WORKDIR /home/appuser
-USER appuser
+# Root password for debugging
+RUN echo root:rootpass | chpasswd
 
-ENV HOME /home/appuser
-ENV PYENV_ROOT /home/appuser/.pyenv
+# RUN useradd -m appuser
+# WORKDIR /home/appuser
+# USER appuser
+# ENV HOME /home/$USER
+WORKDIR /root
+USER root
+ENV HOME /root
+
+ENV PYENV_ROOT $HOME/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 
 RUN git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
