@@ -6,8 +6,7 @@ RUN ln -s /usr/local/texlive/2019 /usr/local/texlive/2017
 RUN wget http://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh -O /tmp/update-tlmgr-latest.sh
 RUN sh /tmp/update-tlmgr-latest.sh -- --upgrade
 RUN tlmgr update --self --all
-RUN tlmgr install minted
-
+RUN tlmgr install biblatex biber xcolor lineno etoolbox fvextra fancyvrb upquote ifplatform xstring framed caption outlines booktabs enumitem babel-swedish microtype csquotes logreq setspace type1cm minted
 RUN apt update -q
 RUN apt install -qy \
 	make build-essential libssl-dev zlib1g-dev libbz2-dev \
