@@ -3,7 +3,8 @@ FROM blang/latex:ctanbasic
 # https://tug.org/texlive/upgrade.html
 RUN mv -f /usr/local/texlive/2017 /usr/local/texlive/2019
 RUN ln -s /usr/local/texlive/2019 /usr/local/texlive/2017
-RUN wget http://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh -O /tmp/update-tlmgr-latest.sh
+#  RUN wget http://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh -O /tmp/update-tlmgr-latest.sh
+ADD http://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh /tmp/update-tlmgr-latest.sh
 RUN sh /tmp/update-tlmgr-latest.sh -- --upgrade
 RUN tlmgr update --self --all
 RUN tlmgr install biblatex biber xcolor lineno etoolbox fvextra fancyvrb upquote ifplatform xstring framed caption outlines booktabs enumitem babel-swedish microtype csquotes logreq setspace type1cm minted
