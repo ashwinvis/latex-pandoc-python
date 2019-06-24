@@ -7,12 +7,13 @@ RUN ln -s /usr/local/texlive/2019 /usr/local/texlive/2017
 ADD http://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh /tmp/update-tlmgr-latest.sh
 RUN sh /tmp/update-tlmgr-latest.sh -- --upgrade
 RUN tlmgr update --self --all
-RUN tlmgr install biblatex biber xcolor lineno etoolbox fvextra fancyvrb upquote ifplatform xstring framed caption outlines booktabs enumitem babel-swedish microtype csquotes logreq setspace type1cm minted
+RUN tlmgr install biblatex biber xcolor lineno etoolbox fvextra fancyvrb upquote ifplatform xstring framed caption outlines booktabs enumitem babel-swedish microtype csquotes logreq setspace type1cm minted epstopdf texliveonfly
 RUN apt update -q
 RUN apt install -qy \
 	make build-essential libssl-dev zlib1g-dev libbz2-dev \
 	libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-	xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+	xz-utils tk-dev libffi-dev liblzma-dev python-openssl git \
+	ghostscript
 
 ENV PANDOC_VERSION=2.7.2
 RUN wget https://github.com/jgm/pandoc/releases/download/$PANDOC_VERSION/pandoc-$PANDOC_VERSION-linux.tar.gz -qO /tmp/pandoc.tar.gz
